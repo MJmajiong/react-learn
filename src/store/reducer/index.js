@@ -2,7 +2,8 @@ import { action } from 'commander'
 import * as actionTypes from '../action/action-type'
 import loginUser from './loginUser'
 import users from './users'
-import { combineReducers } from 'redux'
+// import { combineReducers } from 'redux'
+import {combineReducers} from '../../redux'
 /*
  *reducer本质上就是一个普通函数
  *@param state 之前仓库的状态（数据）

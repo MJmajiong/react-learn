@@ -1,16 +1,14 @@
+import ActionTypes from './utils/ActionTypes'
+import isPlainObject from './utils/isPlainObject'
+//--------------------------------------------createStore源码--------------------------------------------------
+
 /**
- * 判断某个对象是否是一个plain-object
- * @params {*} obj
- * @params {any} defaultState 默认的状态值
+ * 得到一个指定长度的随机字符串
+ * @params {*} length
  */
-function isPlainObject(obj) {
-    if(typeof obj !== "object"){
-        return false
-    }
-    return Object.getPrototypeOf(obj) == Object.prototype
+function getRandomString(length) {
+    return Math.random().toString(36).substr(2, 7).split('').join('.')
 }
-
-
 
 /**
  * 实现createStore功能
@@ -20,17 +18,47 @@ function isPlainObject(obj) {
 export default function (reducer, defaultState) {
 
     const currentReducer = reducer;       //当前使用的reducer
-    const currentState = defaultState     //当前仓库中的状态
+    let currentState = defaultState     //当前仓库中的状态
 
-    function dispatch() {
+    const listeners = []    //记录所有的监听器（订阅器）
+
+    function dispatch(action) {
         // 验证action
+        if(!isPlainObject(action)){
+            throw new TypeError("action must be a plain Object")
+        }
+        // 验证action的type属性是否存在
+        if(action.type === undefined){
+            throw new TypeError("action must has a property of type")
+        }
+        currentState = currentReducer(currentState, action)
+
+        //运行所有的监听器（订阅器）
+        for(const listener of listeners){
+            listener()
+        }
     }
     function getState() {
-
+        return currentState
     }
-    function subscribe() {
 
+    // 添加一个监听器（订阅器）    发布订阅模式
+    function subscribe(listener) {
+        listeners.push(listener)
+        let isRemove = false //是否已经移除掉了
+        return function () {
+            if(isRemove) {
+                return
+            }
+            //将listener从数组中一处
+            const index = listeners.indexOf(listener)
+            listeners.splice(index, 1)
+            isRemove = true
+        }
     }
+    dispatch({
+        type: ActionTypes.INIT()
+    })
     return {
         dispatch,
         getState,

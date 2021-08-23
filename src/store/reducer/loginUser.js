@@ -1,4 +1,4 @@
-import { SETLOGINUSERTYPE } from "../action/LoginUserAction";
+import { SETLOGINUSERTYPE } from "../action/loginUserAction";
 
 const initialState = {
 

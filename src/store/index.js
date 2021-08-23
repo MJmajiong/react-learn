@@ -1,5 +1,6 @@
 //最基本的redux写法  从store 到  reducer 和 action
-import { bindActionCreators, createStore } from 'redux'
+// import { bindActionCreators, createStore } from 'redux'
+import { createStore, bindActionCreators } from '../redux/index'
 import * as actionTypes from './action/action-type'
 import * as numberActions from './action/number-action'
 import { createAddUserAction, delteAddUserAction } from './action/userAction'
@@ -50,7 +51,8 @@ const store = createStore(reducer)
 //当调用action后的第一时间触发这个监听器
 //可以注册多个监听器
 const unListen = store.subscribe(() => {
-    console.log(store.getState())
+    // console.log(store.getState())
+    console.log('有取消监听的地方')
 })
 
 store.subscribe(() => {
@@ -69,6 +71,32 @@ store.dispatch(
 
 // 取消监听
 unListen()
+
 store.dispatch(delteAddUserAction(3))
+
+console.log(store.getState())
+
+const actionCreators = {
+    addUser: createAddUserAction,
+    deleteUser: delteAddUserAction
+}
+
+
+// bindActionCreators 第一个参数，传入一个对象就返回一个对象，传入一个函数就返回一个函数
+// 如果 bindFun = bindActionCreators(createAddUserAction, store.dispatch)
+// 那么 直接执行bindFun({id: 4, name: '用户4', age: 33}),就相当于调用了store.dispatch(createAddUserAction)
+const bindAction = bindActionCreators(actionCreators, store.dispatch)
+
+bindAction.addUser({
+    id: 3,
+    name: '用户3',
+    age: 23
+})
+
+bindAction.addUser({
+    id: 4,
+    name: '用户4',
+    age: 44
+})
 
 console.log(store.getState())

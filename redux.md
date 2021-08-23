@@ -102,7 +102,7 @@ reducer实际就是一个函数
         1. 不能以任何形式改动参数
         2. 不可以有异步
         3. 不可以对外部环境中的数据造成影响
-6. 为了方便李用actioni创建函数来分发action，redux提供了一个函数```bindActionCreators```
+6. 为了方便利用actioni创建函数来分发action，redux提供了一个函数```bindActionCreators```
     该函数用于增强action创建函数的功能,使他不仅可以创建action,并且创建后自动完成分发
 
 
@@ -148,3 +148,14 @@ subscribe: 注册一个监听器,监听器是一个无参函数,当分发一个a
 Symbol("observable"): rxjs
 
 # createStore 源码
+
+# bindActionCreators 源码
+
+# combineReducers 源码
+
+组装reducers，返回一个reducer，数据使用一个对象表示，对象的属性名与传递的参数对象保持一致
+
+# redux 中间件
+
+中间件：类似于插件，可以在不影响原本功能，并且不改动原本代码的基础上，对其功能进行增强
+
