@@ -1,11 +1,12 @@
 //最基本的redux写法  从store 到  reducer 和 action
-// import { bindActionCreators, createStore } from 'redux'
-import { createStore, bindActionCreators } from '../redux/index'
+// import { bindActionCreators, createStore, applyMiddleware } from 'redux'
+import { createStore, bindActionCreators, applyMiddleware } from '../redux/index'
 import * as actionTypes from './action/action-type'
 import * as numberActions from './action/number-action'
 import { createAddUserAction, delteAddUserAction } from './action/userAction'
 import reducer from './reducer/index'
 import {v4 as uuid} from 'uuid'
+import '../redux/compose'
 // 约定action的格式：{type:"操作类型"， payload:"附加状态"}
 
 //---------------------------------------------------这是单个action和单个reducer的写法,比较简单,下面是多个action和多个reducer合并的写法----------------------------------------------------
@@ -46,7 +47,75 @@ import {v4 as uuid} from 'uuid'
 
 //------------------------------------------------------------------------分界线-------------------------------------------------------------------------------
 
-const store = createStore(reducer)
+/**
+ *  一个中间件函数
+ * @param {*} store
+ */
+function logger1(store) {
+    console.log("logger1")
+    return function (next) {
+        //下面返回的函数，是最终要应用的dispatch
+        return function dispatch(action) {
+            console.log("中间件1")
+            console.log("旧数据", store.getState())
+            console.log("action", action)
+            // oldDispatch(action)
+            next(action)
+            // 如果这里把next(action)写成store.dispatch(action),就会变成无线递归
+            console.log("新数据", store.getState())
+            console.log("")
+        }
+    }
+}
+
+function logger2(store) {
+    console.log("logger2")
+    return function (next) {
+        //下面返回的函数，是最终要应用的dispatch
+        return function dispatch(action) {
+            console.log("中间件2")
+            console.log("旧数据", store.getState())
+            console.log("action", action)
+            // oldDispatch(action)
+            next(action)
+            console.log("新数据", store.getState())
+            console.log("")
+        }
+    }
+}
+
+// 中间件  洋葱模型
+
+// 应用中间件，方式1
+// const store = createStore(reducer, applyMiddleware(logger1, logger2))
+
+
+//应用中间件，方式2 效果等同于方式一，这种方式类似柯里化
+const store = applyMiddleware(logger1, logger2)(createStore)(reducer)
+
+// 中间件的实现原理，就是更改dispatch的功能
+// let oldDispatch = store.dispatch  //保留原来的dispatch函数
+// store.dispatch = function (action) { // 更改store中的disaptch
+//     console.log("中间件1")
+//     console.log("旧数据", store.getState())
+//     console.log("action", action)
+//     oldDispatch(action)
+//     console.log("新数据", store.getState())
+//     console.log("")
+// }
+
+
+// oldDispatch = store.dispatch  //保留原来的dispatch函数
+// store.dispatch = function (action) { // 更改store中的disaptch
+//     console.log("中间件2")
+//     console.log("旧数据", store.getState())
+//     console.log("action", action)
+//     oldDispatch(action)
+//     console.log("新数据", store.getState())
+//     console.log("")
+// }
+
+
 
 //当调用action后的第一时间触发这个监听器
 //可以注册多个监听器

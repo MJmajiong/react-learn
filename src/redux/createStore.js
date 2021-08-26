@@ -14,8 +14,19 @@ function getRandomString(length) {
  * 实现createStore功能
  * @params {function} reducer reducer
  * @params {any} defaultState 默认的状态值
+ * @params {any} enhanced 默认的状态值
  */
-export default function (reducer, defaultState) {
+export default function createStore(reducer, defaultState, enhanced) {
+    // enhanced 表示applymiddleware返回的函数
+    if(typeof defaultState === 'function'){
+        // 第二个参数是应用中间件的函数返回值
+        enhanced = defaultState
+        defaultState = undefined
+    }
+    if(typeof enhanced === 'function'){
+        // 进入applyMiddleware的处理逻辑
+        return enhanced(createStore)(reducer, defaultState)
+    }
 
     const currentReducer = reducer;       //当前使用的reducer
     let currentState = defaultState     //当前仓库中的状态
