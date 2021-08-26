@@ -178,3 +178,7 @@ redux中间件书写：
 middleware的本质，是一个调用后可以得到dispatch创建函数的函数
 
 compose: 函数式编程，函数组合，将一个数组中的函数进行组合，形成一个新的函数，该函数调用时，实际上是反向调用之前组合的函数(具体看static的compose流程图)
+
+# 第三方库
+# redux-logger
+

@@ -1,12 +1,13 @@
 //最基本的redux写法  从store 到  reducer 和 action
-// import { bindActionCreators, createStore, applyMiddleware } from 'redux'
-import { createStore, bindActionCreators, applyMiddleware } from '../redux/index'
+import { bindActionCreators, createStore, applyMiddleware } from 'redux'
+// import { createStore, bindActionCreators, applyMiddleware } from '../redux/index'
 import * as actionTypes from './action/action-type'
 import * as numberActions from './action/number-action'
 import { createAddUserAction, delteAddUserAction } from './action/userAction'
 import reducer from './reducer/index'
 import {v4 as uuid} from 'uuid'
 import '../redux/compose'
+import reduxLogger, {createLogger} from 'redux-logger'
 // 约定action的格式：{type:"操作类型"， payload:"附加状态"}
 
 //---------------------------------------------------这是单个action和单个reducer的写法,比较简单,下面是多个action和多个reducer合并的写法----------------------------------------------------
@@ -49,6 +50,7 @@ import '../redux/compose'
 
 /**
  *  一个中间件函数
+ *  主要的代码跟下面的一样，这里只是写的更规范一点而已
  * @param {*} store
  */
 function logger1(store) {
@@ -88,10 +90,15 @@ function logger2(store) {
 
 // 应用中间件，方式1
 // const store = createStore(reducer, applyMiddleware(logger1, logger2))
-
+// 上面这个logger1  logger2是自己写的，有写好的第三方库，redux-logger,直接引用即可,里面有一些配置项可以选，如果不需要直接applyMiddleware(reduxLogger)
+//  redux-logger 要放到最后一个，其他的中间件会影响到他
+const logger = createLogger({
+    duration:true
+})
+const store = createStore(reducer, applyMiddleware(logger))
 
 //应用中间件，方式2 效果等同于方式一，这种方式类似柯里化
-const store = applyMiddleware(logger1, logger2)(createStore)(reducer)
+// const store = applyMiddleware(logger1, logger2)(createStore)(reducer)
 
 // 中间件的实现原理，就是更改dispatch的功能
 // let oldDispatch = store.dispatch  //保留原来的dispatch函数
