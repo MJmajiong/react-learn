@@ -81,6 +81,8 @@ var deleteAction = {
 
 **redux**
 
+必须是个纯函数，不能往里面加入什么异步的东西，所以才需要第三方库
+
 在flux的基础上，引入了reducer的概念
 
 reducer： 处理器，用于根据action来处理数据，处理后的数据会被仓库重新保存
@@ -180,5 +182,46 @@ middleware的本质，是一个调用后可以得到dispatch创建函数的函�
 compose: 函数式编程，函数组合，将一个数组中的函数进行组合，形成一个新的函数，该函数调用时，实际上是反向调用之前组合的函数(具体看static的compose流程图)
 
 # 第三方库
+
 # redux-logger
+
+# 李用中间件进行副作用踔厉
+
+- redux-thunk
+
+thunk 允许action 是一个带有副作用的函数，当action是一个函数被分发时，thunk会阻止action继续向后提交
+thunk 会向函数传递三个参数
+    - dispatch 来自于store.dispatch
+    - getState 来自于store.getState
+    - extra: 来自于用户设置的额外参数
+
+- redux-promise
+- redux-saga
+
+
+
+
+
+# 迭代器和可迭代协议
+
+解决副作用的redux中间件
+- redux-thunk: 需要改动action, 可接收action是一个函数
+- redux-promise: 需要改动action, 可接收action是一个promise对象，或action的payload是一个promise对象
+以上两个中间件，会导致action或action创建函数不再纯净
+- redux-saga将解决这样的问题，他不仅可以保持action,action创建函数，reducer的纯净，而且可以用模块化的方式解决副作用，并且非常强大
+
+redux-saga是建立在es6的生成器基础上的，要熟练的使用saga，必须理解生成器。
+要理解生成器，必须先理解迭代器和可迭代协议
+
+## 迭代
+ 
+类似于遍历
+
+遍历: 有多个数据组成集合数据结构（map. set. array等其他类数组）,需要从该结构中依次取出数据进行某种处理
+
+迭代：按照某种逻辑，一次取出下一个数据进行处理
+
+## 迭代器
+
+
 

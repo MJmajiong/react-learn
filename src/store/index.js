@@ -8,6 +8,8 @@ import reducer from './reducer/index'
 import {v4 as uuid} from 'uuid'
 import '../redux/compose'
 import reduxLogger, {createLogger} from 'redux-logger'
+import reduxThunk from 'redux-thunk'
+
 // 约定action的格式：{type:"操作类型"， payload:"附加状态"}
 
 //---------------------------------------------------这是单个action和单个reducer的写法,比较简单,下面是多个action和多个reducer合并的写法----------------------------------------------------
@@ -95,7 +97,7 @@ function logger2(store) {
 const logger = createLogger({
     duration:true
 })
-const store = createStore(reducer, applyMiddleware(logger))
+export const store = createStore(reducer, applyMiddleware(reduxThunk, logger))
 
 //应用中间件，方式2 效果等同于方式一，这种方式类似柯里化
 // const store = applyMiddleware(logger1, logger2)(createStore)(reducer)
