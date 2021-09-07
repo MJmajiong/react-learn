@@ -13,7 +13,7 @@ export default function (...middlewares) {
             }
             const simpleStore = {
                 getState: store.getState,
-                dispatch: store.dispatch
+                dispatch: (...args) => dispatch(...args)
             }
             // 给dispatch赋值
             // 根据中间件数组，得到一个dispatch数组

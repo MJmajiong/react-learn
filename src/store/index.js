@@ -9,7 +9,9 @@ import {v4 as uuid} from 'uuid'
 import '../redux/compose'
 import reduxLogger, {createLogger} from 'redux-logger'
 import reduxThunk from 'redux-thunk'
+import createSagaMiddleware from 'redux-saga'
 
+const sagaMid = createSagaMiddleware()
 // 约定action的格式：{type:"操作类型"， payload:"附加状态"}
 
 //---------------------------------------------------这是单个action和单个reducer的写法,比较简单,下面是多个action和多个reducer合并的写法----------------------------------------------------

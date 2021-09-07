@@ -1,3 +1,4 @@
+import ActionTypes from '../../redux/utils/ActionTypes'
 import {getAllStudents} from '../../services/index'
 
 export const ADDUSER = Symbol('add-user')
@@ -46,4 +47,28 @@ export function fetchUsers() {
         dispatch(createSetLoadingAction(false))
     }
 }
+
+// 由于使用了redux-promise中间件，因此，允许action是一个promise,在promise中，如果要触发action，则使用resolve
+// export function featchStudent() {
+//     return new Promise(resolve => {
+//         setTimeout(() => {
+//             const action = setStudentAndTotal([{id:1, name:'aaa'}, {id:2, name:'bbb'}])
+//             resolve(action)
+//         }, 1000)
+//     })
+// }
+
+// export async function featchStudent(condition) {
+//     return {
+//         type: ActionTypes.setStudentAndTotal,
+//         payload: new Promise(resolve => {
+//             saerchStudent(condition).then(resp => {
+//                 data:resp.data,
+//                 total: resp.total
+//             })
+//         })
+//     }
+// }
+
+
 
